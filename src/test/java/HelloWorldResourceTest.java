@@ -8,16 +8,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HelloWorldResourceTest{
-//    @Override
-//    protected Application configure() {
-//        return new ResourceConfig(HelloWorldResource.class);
-//    }
-//
-//    @Test
-//    public void test() {
-//        final String hello = target("hello").request().get(String.class);
-//        assertEquals("Hello World!", hello);
-//    }
 
     @InjectMocks
     HelloWorldResource helloWorldResource;

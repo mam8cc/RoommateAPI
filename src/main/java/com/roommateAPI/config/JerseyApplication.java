@@ -1,10 +1,11 @@
 package com.roommateAPI.config;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
+import com.roommateAPI.resources.HelloWorldResource;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class JerseyApplication extends ResourceConfig {
+
     public JerseyApplication() {
-        register(JacksonFeature.class);
+        register(HelloWorldResource.class);
     }
 }

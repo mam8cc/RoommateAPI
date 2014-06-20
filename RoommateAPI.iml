@@ -47,6 +47,7 @@
     <orderEntry type="library" exported="" name="Gradle: junit-4.11" level="project" />
     <orderEntry type="library" exported="" name="Gradle: asm-debug-all-5.0.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: mockito-all-1.9.5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: scrypt-1.4.0" level="project" />
   </component>
 </module>
 

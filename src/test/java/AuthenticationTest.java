@@ -16,28 +16,28 @@ public final class AuthenticationTest {
     Authentication authentication;
 
     @Test
-    public void test_success() throws Exception {
+    public void itShouldReturnSuccessWithGoodCredentials() throws Exception {
         String actual = authentication.login("test", "test");
 
         assertEquals("SUCCESS!", actual);
     }
 
     @Test
-    public void test_trimUsername() throws Exception {
+    public void itShouldTrimAndReturnSuccessWithGoodCredentials() throws Exception {
         String actual = authentication.login(" test ", "test");
 
         assertEquals("SUCCESS!", actual);
     }
 
     @Test
-    public void test_wrongUsername() throws Exception {
+    public void itShouldReturn404WithWrongUsername() throws Exception {
         String actual = authentication.login("testt", "test");
 
         assertEquals("FAIL", actual);
     }
 
     @Test
-    public void test_wrongPassword() throws Exception {
+    public void itShouldReturn401WithWrongPassword() throws Exception {
         String actual = authentication.login("test", "Test");
 
         assertEquals("FAIL", actual);

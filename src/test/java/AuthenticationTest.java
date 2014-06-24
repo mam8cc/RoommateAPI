@@ -1,8 +1,13 @@
 import com.roommateAPI.resources.Authentication;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,11 +17,14 @@ import static org.junit.Assert.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public final class AuthenticationTest {
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @InjectMocks
     Authentication authentication;
 
     @Test
-    public void itShouldReturnSuccessWithGoodCredentials() throws Exception {
+    public void itShouldReturnSuccessWithGoodCredentials() {
         String actual = authentication.login("test", "test");
 
         assertEquals("SUCCESS!", actual);
@@ -30,16 +38,14 @@ public final class AuthenticationTest {
     }
 
     @Test
-    public void itShouldReturn404WithWrongUsername() throws Exception {
-        String actual = authentication.login("testt", "test");
-
-        assertEquals("FAIL", actual);
+    public void itShouldReturn404WithWrongUsername() {
+        exception.expect(NotFoundException.class);
+        authentication.login("testt", "test");
     }
 
     @Test
     public void itShouldReturn401WithWrongPassword() throws Exception {
-        String actual = authentication.login("test", "Test");
-
-        assertEquals("FAIL", actual);
+        exception.expect(NotAuthorizedException.class);
+        authentication.login("test", "Test");
     }
 }

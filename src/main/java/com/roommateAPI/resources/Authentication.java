@@ -2,10 +2,7 @@ package com.roommateAPI.resources;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -51,8 +48,10 @@ public class Authentication {
             if (SCryptUtil.check(password, passwordToMatch)) {
                 //What should be returned can be discussed.
                 return "SUCCESS!";
+            } else {
+                throw new NotAuthorizedException("Wrong password");
             }
         }
-        return "FAIL";
+        throw new NotFoundException();
     }
 }

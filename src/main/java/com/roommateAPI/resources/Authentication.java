@@ -1,9 +1,16 @@
 package com.roommateAPI.resources;
 
 import com.lambdaworks.crypto.SCryptUtil;
+import com.roommateAPI.dao.AuthenticationDao;
+import com.roommateAPI.dao.AuthorizationTokenDao;
+import com.roommateAPI.dao.UserDao;
+import com.roommateAPI.models.LoginAttemptModel;
+import com.roommateAPI.models.UserModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.SQLException;
 
 /**
  * Jumping off point for our authentication aspirations.
@@ -24,7 +31,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Steven Rodenberg
  */
-@Path("/authentication")
+@Path("authentication")
 public class Authentication {
 
     /**
@@ -32,14 +39,28 @@ public class Authentication {
      *
      * @param userName The name of the user to be authenticated.
      * @param password the hashed version of the password selected by the user.
+     *
+     *
      */
+
+
+    @Autowired
+    AuthenticationDao authenticationDao;
+
+    @Autowired
+    AuthorizationTokenDao authorizationTokenDao;
+
+    @Autowired
+    UserDao userDao;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@FormParam("userName") String userName, @FormParam("password") String password) {
+
+
         //TODO:
-        //1. Database hookup.
-        //2. Decide on what to return.
+        //1. Database hookup.       DONE:  Use the authenticationDao declared as a prop.
+        //2. Decide on what to return.      DONE:  Return 201 on authorization (created a token), and return said token.
         //3. do we need to do anything special for https?
         //No db yet, let's just hardcode it. winning combination should be test/test
         if ("test".equalsIgnoreCase(userName.trim())) {
@@ -53,5 +74,15 @@ public class Authentication {
             }
         }
         throw new NotFoundException();
+    }
+
+    @POST   @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/test")
+    public String login2(final LoginAttemptModel post) throws SQLException {
+        System.out.println(authenticationDao.fetchUser(post.getEmail()));
+        UserModel user = userDao.selectUserByEmail(post.getEmail());
+        Long tokenId = authorizationTokenDao.insertAuthorizationToken(user.getUserId());
+        return authorizationTokenDao.fetchTokenById(tokenId);
+
     }
 }

@@ -1,24 +1,24 @@
 package com.roommateAPI.models;
 
 public class UserModel {
-    public Long userId;
+    public Long id;
     public String email;
-    public String passwordHash;
+    public String password;
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -27,5 +27,10 @@ public class UserModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ".  EMAIL: " + email + ". PASSWORD: " + password;
     }
 }

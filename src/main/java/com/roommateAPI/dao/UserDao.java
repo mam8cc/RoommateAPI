@@ -1,34 +1,33 @@
 package com.roommateAPI.dao;
 
 import com.roommateAPI.models.UserModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+public interface UserDao {
 
-public class UserDao {
+    @Insert("INSERT INTO USERS (email, password) VALUES (#{email}, #{password})")
+    @Options(useGeneratedKeys=true, keyProperty="id")
+    void insertUser(UserModel user);
 
-    @Autowired
-    DataSource dataSource;
+    @Select("SELECT * FROM USERS WHERE id = #{id}")
+    UserModel selectUserByModel(UserModel user);
 
-    public UserModel selectUserByEmail(String email) throws SQLException {
-        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Users WHERE email = ?");
-        statement.setString(1, email);
-        ResultSet results  = statement.executeQuery();
-        results.next();
+    @Select("SELECT * FROM USERS WHERE email = #{email}")
+    UserModel selectUserByEmail(String email);
 
-        UserModel model = new UserModel();
-        model.setEmail(email);
-        model.setUserId(results.getLong("id"));
-        model.setPasswordHash(results.getString("passwordHash"));
-
-        return model;
-    }
-
-    private Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
-    }
+//    public UserModel selectUserByEmail(String email) throws SQLException {
+//        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Users WHERE email = ?");
+//        statement.setString(1, email);
+//        ResultSet results  = statement.executeQuery();
+//        results.next();
+//
+//        UserModel model = new UserModel();
+//        model.setEmail(email);
+//        model.setId(results.getLong("id"));
+//        model.setPassword(results.getString("password"));
+//
+//        return model;
+//    }
 }

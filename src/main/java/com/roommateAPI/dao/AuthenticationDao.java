@@ -35,7 +35,7 @@ public class AuthenticationDao {
         ResultSet result = statement.executeQuery();
 
         result.next();
-        return result.getString("passwordHash");
+        return result.getString("password");
     }
 
     private Connection getConnection() throws SQLException {

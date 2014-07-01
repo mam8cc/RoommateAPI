@@ -35,10 +35,8 @@ public class SpringApplication {
     }
     @Bean
     public UserDao userDao() throws Exception {
-//        SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
-//        return sessionTemplate.getMapper(UserDao.class);
-
-        return new UserDao();
+        SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
+        return sessionTemplate.getMapper(UserDao.class);
     }
 
     @Bean

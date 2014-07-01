@@ -1,1 +1,1 @@
-INSERT INTO USERS (email, passwordHash) VALUES ('test@test.com', 'testPassword');
+INSERT INTO USERS (email, password) VALUES ('test@test.com', 'testPassword');

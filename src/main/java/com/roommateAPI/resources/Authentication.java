@@ -88,8 +88,8 @@ public class Authentication {
     public Response login2(final LoginAttemptModel post) throws SQLException {
         UserModel user = userDao.selectUserByEmail(post.getEmail());
 
-        if(post.getPasswordHash().equals(user.getPasswordHash())) {
-            AuthorizationToken token = createNewToken(user.getUserId());
+        if(post.getPassword().equals(user.getPassword())) {
+            AuthorizationToken token = createNewToken(user.getId());
             authorizationTokenDao.insertAuthorizationToken(token);
             return Response.ok(authorizationTokenDao.selectAuthorizationToken(token), MediaType.APPLICATION_JSON).build();
         }

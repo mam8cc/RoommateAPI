@@ -2,7 +2,7 @@ package com.roommateAPI.models;
 
 public class LoginAttemptModel {
     public String email;
-    public String passwordHash;
+    public String password;
 
     public String getEmail() {
         return email;
@@ -12,11 +12,11 @@ public class LoginAttemptModel {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

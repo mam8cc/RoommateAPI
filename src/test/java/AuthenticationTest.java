@@ -79,7 +79,7 @@ public final class AuthenticationTest {
     private LoginAttemptModel setupGoodLoginAttempt() {
         LoginAttemptModel model = new LoginAttemptModel();
         model.setEmail("test@test.com");
-        model.setPasswordHash("passwordHash");
+        model.setPassword("password");
 
         return model;
     }
@@ -87,8 +87,8 @@ public final class AuthenticationTest {
     private UserModel setupUserModel() {
         UserModel model = new UserModel();
         model.setEmail("test@test.com");
-        model.setPasswordHash("passwordHash");
-        model.setUserId(0l);
+        model.setPassword("password");
+        model.setId(0l);
 
         return model;
     }

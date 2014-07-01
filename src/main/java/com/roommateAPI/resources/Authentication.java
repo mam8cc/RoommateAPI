@@ -1,9 +1,19 @@
 package com.roommateAPI.resources;
 
-import com.lambdaworks.crypto.SCryptUtil;
+import com.roommateAPI.dao.AuthorizationTokenDao;
+import com.roommateAPI.dao.UserDao;
+import com.roommateAPI.models.AuthorizationToken;
+import com.roommateAPI.models.LoginAttemptModel;
+import com.roommateAPI.models.UserModel;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import static java.util.UUID.randomUUID;
 
 /**
  * Jumping off point for our authentication aspirations.
@@ -24,34 +34,64 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Steven Rodenberg
  */
-@Path("/authentication")
+@Path("authentication")
 public class Authentication {
 
-    /**
-     * Returns auth token after verifying user details.
-     *
-     * @param userName The name of the user to be authenticated.
-     * @param password the hashed version of the password selected by the user.
-     */
+    @Autowired AuthorizationTokenDao authorizationTokenDao;
+    @Autowired UserDao userDao;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public String login(@FormParam("userName") String userName, @FormParam("password") String password) {
-        //TODO:
-        //1. Database hookup.
-        //2. Decide on what to return.
-        //3. do we need to do anything special for https?
-        //No db yet, let's just hardcode it. winning combination should be test/test
-        if ("test".equalsIgnoreCase(userName.trim())) {
-            //This shouldn't be necessary once DB hookup is in place, their PW in the db should be stored as a hash.
-            String passwordToMatch = SCryptUtil.scrypt("test", 16384, 8, 1);
-            if (SCryptUtil.check(password, passwordToMatch)) {
-                //What should be returned can be discussed.
-                return "SUCCESS!";
-            } else {
-                throw new NotAuthorizedException("Wrong password");
-            }
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/login")
+    public AuthorizationToken login2(final LoginAttemptModel post) throws SQLException, NotAuthorizedException {
+        UserModel user = userDao.selectUserByEmail(post.getEmail());
+
+        if(user == null) {
+            throw new NotFoundException();
         }
-        throw new NotFoundException();
+
+        if(post.getPassword().equals(user.getPassword())) {
+            return getAuthorizationToken(user);
+        }
+        else {
+            throw new NotAuthorizedException("Not authorized.");
+        }
+    }
+
+    //TODO:  Extract this to a token service.  This resource knows WAYYYY too much about token logic.
+    private AuthorizationToken getAuthorizationToken(UserModel user) {
+        AuthorizationToken token;
+        if(validTokenForUserExists(user.getId())) {
+            authorizationTokenDao.updateTokenExpirationDate(user.getId(), createNewExpirationTimestamp());
+            token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
+        }
+        else {
+            token = createNewToken(user.getId());
+            authorizationTokenDao.insertAuthorizationToken(token);
+        }
+        return token;
+    }
+
+    private Timestamp createNewExpirationTimestamp() {
+        return new Timestamp(new DateTime().plusMonths(1).getMillis());
+    }
+
+    private boolean validTokenForUserExists(Long userId) {
+        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(userId);
+
+        return token != null && token.getExpirationDate().getTime() < new DateTime().getMillis();
+
+    }
+
+    private AuthorizationToken createNewToken(Long userId) {
+        DateTime expires = new DateTime();
+        expires.plusMonths(1);
+
+        AuthorizationToken token = new AuthorizationToken();
+        token.setUserId(userId);
+        token.setToken(randomUUID().toString());
+        token.setExpirationDate(new Timestamp(expires.getMillis()));
+
+        return token;
     }
 }

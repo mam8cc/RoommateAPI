@@ -1,5 +1,6 @@
 package com.roommateAPI.resources;
 
+import com.roommateAPI.dao.AuthenticationDao;
 import com.roommateAPI.service.HelloWorldService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,6 +15,9 @@ public class HelloWorldResource {
     @Autowired
     HelloWorldService helloWorldService;
 
+    @Autowired
+    AuthenticationDao authenticationDao;
+
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String helloWorld() {
@@ -27,4 +31,9 @@ public class HelloWorldResource {
     public String helloWorldTwo() {
         return helloWorldService.sayHelloTwo();
     }
+
+    @GET
+    @Path("/three")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String dbTest() { return authenticationDao.getRowCount().toString(); }
 }

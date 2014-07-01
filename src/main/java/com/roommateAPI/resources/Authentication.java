@@ -4,13 +4,19 @@ import com.lambdaworks.crypto.SCryptUtil;
 import com.roommateAPI.dao.AuthenticationDao;
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
+import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.LoginAttemptModel;
 import com.roommateAPI.models.UserModel;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import static java.util.UUID.randomUUID;
 
 /**
  * Jumping off point for our authentication aspirations.
@@ -76,13 +82,31 @@ public class Authentication {
         throw new NotFoundException();
     }
 
-    @POST   @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/test")
-    public String login2(final LoginAttemptModel post) throws SQLException {
-        System.out.println(authenticationDao.fetchUser(post.getEmail()));
+    public Response login2(final LoginAttemptModel post) throws SQLException {
         UserModel user = userDao.selectUserByEmail(post.getEmail());
-        Long tokenId = authorizationTokenDao.insertAuthorizationToken(user.getUserId());
-        return authorizationTokenDao.fetchTokenById(tokenId);
 
+        if(post.getPasswordHash().equals(user.getPasswordHash())) {
+            AuthorizationToken token = createNewToken(user.getUserId());
+            authorizationTokenDao.insertAuthorizationToken(token);
+            return Response.ok(authorizationTokenDao.selectAuthorizationToken(token), MediaType.APPLICATION_JSON).build();
+        }
+        else {
+            return Response.status(401).build();
+        }
+    }
+
+    private AuthorizationToken createNewToken(Long userId) {
+        DateTime expires = new DateTime();
+        expires.plusMonths(1);
+
+        AuthorizationToken token = new AuthorizationToken();
+        token.setUserId(userId);
+        token.setToken(randomUUID().toString());
+        token.setExpirationDate(new Timestamp(expires.getMillis()));
+
+        return token;
     }
 }

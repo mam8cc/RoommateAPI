@@ -7,5 +7,6 @@ CREATE TABLE Users (
 CREATE TABLE Tokens (
         id INTEGER IDENTITY,
         userId INTEGER NOT NULL,
-        token VARCHAR(255) NOT NULL
+        token VARCHAR(255) NOT NULL,
+        expirationDate TIMESTAMP DEFAULT NOW
 );

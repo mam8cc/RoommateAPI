@@ -23,6 +23,7 @@ public class UserDao {
         UserModel model = new UserModel();
         model.setEmail(email);
         model.setUserId(results.getLong("id"));
+        model.setPasswordHash(results.getString("passwordHash"));
 
         return model;
     }

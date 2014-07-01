@@ -78,6 +78,9 @@
     <orderEntry type="library" exported="" name="Gradle: spring-tx-4.0.5.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: hsqldb-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: scrypt-1.4.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: mybatis-3.2.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: mybatis-spring-1.2.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: joda-time-2.3" level="project" />
   </component>
 </module>
 

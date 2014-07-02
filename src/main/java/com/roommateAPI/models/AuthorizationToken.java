@@ -33,7 +33,6 @@ public class AuthorizationToken {
         this.userId = userId;
     }
 
-
     public Long getId() {
         return id;
     }

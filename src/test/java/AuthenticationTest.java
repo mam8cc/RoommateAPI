@@ -111,12 +111,7 @@ public final class AuthenticationTest {
     }
 
     private UserModel setupUserModel() {
-        UserModel model = new UserModel();
-        model.setEmail("test@test.com");
-        model.setPassword("password");
-        model.setId(0l);
-
-        return model;
+        return new UserModel(0l, "test@test.com", "password");
     }
 
 }

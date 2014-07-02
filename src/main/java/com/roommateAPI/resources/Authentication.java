@@ -1,7 +1,6 @@
 package com.roommateAPI.resources;
 
 import com.lambdaworks.crypto.SCryptUtil;
-import com.roommateAPI.dao.AuthenticationDao;
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
@@ -49,15 +48,8 @@ public class Authentication {
      *
      */
 
-
-    @Autowired
-    AuthenticationDao authenticationDao;
-
-    @Autowired
-    AuthorizationTokenDao authorizationTokenDao;
-
-    @Autowired
-    UserDao userDao;
+    @Autowired AuthorizationTokenDao authorizationTokenDao;
+    @Autowired UserDao userDao;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -105,7 +97,7 @@ public class Authentication {
     private AuthorizationToken getAuthorizationToken(UserModel user) {
         AuthorizationToken token;
         if(validTokenForUserExists(user.getId())) {
-            token = authorizationTokenDao.updateTokenExpirationDate(user.getId());
+            token = authorizationTokenDao.updateTokenExpirationDate(user.getId(), createNewExpirationTimestamp());
         }
         else {
             token = createNewToken(user.getId());
@@ -114,14 +106,15 @@ public class Authentication {
         return token;
     }
 
+    private Timestamp createNewExpirationTimestamp() {
+        return new Timestamp(new DateTime().plusMonths(1).getMillis());
+    }
+
     private boolean validTokenForUserExists(Long id) {
         AuthorizationToken token = authorizationTokenDao.selectAuthorizationToken(id);
 
-        if(token != null && token.getExpirationDate().getTime() < new DateTime().getMillis()) {
-            return true;
-        }
+        return token != null && token.getExpirationDate().getTime() < new DateTime().getMillis();
 
-        return false;
     }
 
     private AuthorizationToken createNewToken(Long userId) {

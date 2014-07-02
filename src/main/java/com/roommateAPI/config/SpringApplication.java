@@ -1,6 +1,5 @@
 package com.roommateAPI.config;
 
-import com.roommateAPI.dao.AuthenticationDao;
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -19,14 +18,6 @@ import javax.sql.DataSource;
 @ComponentScan("com.roommateAPI.service")
 @MapperScan("com.roommateAPI.dao")
 public class SpringApplication {
-
-    @Bean
-    public AuthenticationDao authenticationDao() throws Exception {
-//        SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
-//        return sessionTemplate.getMapper(AuthenticationDao.class);
-
-        return new AuthenticationDao();
-    }
 
     @Bean
     public AuthorizationTokenDao authorizationTokenDao() throws Exception {

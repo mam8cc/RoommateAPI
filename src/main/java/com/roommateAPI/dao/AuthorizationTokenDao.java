@@ -15,9 +15,6 @@ public interface AuthorizationTokenDao {
     void insertAuthorizationToken(AuthorizationToken token);
 
     @Select("SELECT * FROM Tokens WHERE id = #{id}")
-    AuthorizationToken selectAuthorizationToken(AuthorizationToken token);
-
-    @Select("SELECT * FROM Tokens WHERE id = #{id}")
     AuthorizationToken selectAuthorizationToken(Long id);
 
     @Update("UPDATE Tokens SET expirationDate = #{newExpirationDate} WHERE id = #{id}")

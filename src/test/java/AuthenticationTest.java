@@ -73,13 +73,35 @@ public final class AuthenticationTest {
 
         Response response = authentication.login2(setupGoodLoginAttempt());
 
-        assertEquals(Response.ok(), response.getStatus());
+        assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    public void itShouldReturnHTTPNotAuthorizedWhenAuthorizationIsBad() throws Exception {
+        when(userDao.selectUserByEmail(anyString())).thenReturn(setupUserModel());
+
+        Response response = authentication.login2(setupBadLoginAttempt());
+
+        assertEquals(401, response.getStatus());
+    }
+    
+    @Test
+    public void itShould() throws Exception {
+        
     }
 
     private LoginAttemptModel setupGoodLoginAttempt() {
         LoginAttemptModel model = new LoginAttemptModel();
         model.setEmail("test@test.com");
         model.setPassword("password");
+
+        return model;
+    }
+
+    private LoginAttemptModel setupBadLoginAttempt() {
+        LoginAttemptModel model = new LoginAttemptModel();
+        model.setEmail("test@test.com");
+        model.setPassword("badPassword");
 
         return model;
     }

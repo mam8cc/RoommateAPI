@@ -33,11 +33,7 @@
     <orderEntry type="library" exported="" name="Gradle: class-model-2.2.0-b21" level="project" />
     <orderEntry type="library" exported="" name="Gradle: hk2-2.2.0-b21" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aopalliance-1.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-aop-3.2.3.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-expression-3.2.3.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-context-3.2.3.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-bridge-2.2.0-b21" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-web-3.2.3.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jersey-media-moxy-2.4.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jersey-guava-2.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aopalliance-repackaged-2.2.0" level="project" />
@@ -81,6 +77,11 @@
     <orderEntry type="library" exported="" name="Gradle: mybatis-3.2.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: mybatis-spring-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: joda-time-2.3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-web-4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-aop-4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-expression-4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-context-4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-webmvc-4.0.5.RELEASE" level="project" />
   </component>
 </module>
 

@@ -4,6 +4,7 @@ import com.roommateAPI.models.AuthorizationToken;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 public interface AuthorizationTokenDao {
 
@@ -14,4 +15,10 @@ public interface AuthorizationTokenDao {
 
     @Select("SELECT * FROM Tokens WHERE id = #{id}")
     AuthorizationToken selectAuthorizationToken(AuthorizationToken token);
+
+    @Select("SELECT * FROM Tokens WHERE id = #{id}")
+    AuthorizationToken selectAuthorizationToken(Long id);
+
+    @Update("UPDATE Tokens SET expirationDate = now() WHERE id = #{id}")
+    AuthorizationToken updateTokenExpirationDate(Long id);
 }

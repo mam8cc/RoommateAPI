@@ -88,14 +88,40 @@ public class Authentication {
     public Response login2(final LoginAttemptModel post) throws SQLException {
         UserModel user = userDao.selectUserByEmail(post.getEmail());
 
+        if(user == null) {
+            return Response.status(404).build();
+        }
+
         if(post.getPassword().equals(user.getPassword())) {
-            AuthorizationToken token = createNewToken(user.getId());
-            authorizationTokenDao.insertAuthorizationToken(token);
-            return Response.ok(authorizationTokenDao.selectAuthorizationToken(token), MediaType.APPLICATION_JSON).build();
+            AuthorizationToken token = getAuthorizationToken(user);
+
+            return Response.ok(token, MediaType.APPLICATION_JSON).build();
         }
         else {
             return Response.status(401).build();
         }
+    }
+
+    private AuthorizationToken getAuthorizationToken(UserModel user) {
+        AuthorizationToken token;
+        if(validTokenForUserExists(user.getId())) {
+            token = authorizationTokenDao.updateTokenExpirationDate(user.getId());
+        }
+        else {
+            token = createNewToken(user.getId());
+            authorizationTokenDao.insertAuthorizationToken(token);
+        }
+        return token;
+    }
+
+    private boolean validTokenForUserExists(Long id) {
+        AuthorizationToken token = authorizationTokenDao.selectAuthorizationToken(id);
+
+        if(token != null && token.getExpirationDate().getTime() < new DateTime().getMillis()) {
+            return true;
+        }
+
+        return false;
     }
 
     private AuthorizationToken createNewToken(Long userId) {

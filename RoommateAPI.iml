@@ -82,6 +82,7 @@
     <orderEntry type="library" exported="" name="Gradle: spring-expression-4.0.5.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-context-4.0.5.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-webmvc-4.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: javax.servlet-api-3.0.1" level="project" />
   </component>
 </module>
 

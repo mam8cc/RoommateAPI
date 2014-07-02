@@ -84,10 +84,14 @@ public final class AuthenticationTest {
 
         assertEquals(401, response.getStatus());
     }
-    
+
     @Test
-    public void itShould() throws Exception {
-        
+    public void itShouldReturnHTTPNotFoundWhenNoUserFound() throws Exception {
+        when(userDao.selectUserByEmail(anyString())).thenReturn(null);
+
+        Response response = authentication.login2(setupBadLoginAttempt());
+
+        assertEquals(404, response.getStatus());
     }
 
     private LoginAttemptModel setupGoodLoginAttempt() {
@@ -114,4 +118,5 @@ public final class AuthenticationTest {
 
         return model;
     }
+
 }

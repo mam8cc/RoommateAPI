@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.roommateAPI.dao.AuthorizationTokenDao">
+
+    <insert id="insertAuthorizationToken"
+            parameterType="com.roommateAPI.models.AuthorizationToken"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO TOKENS (id, userId, token) VALUES (#{id},#{userId},#{token})
+    </insert>
+
+    <select id="selectAuthorizationTokenByUserId" resultType="com.roommateAPI.models.AuthorizationToken">
+        SELECT * FROM Tokens WHERE userId = #{userId}
+    </select>
+
+    <update id="updateTokenExpirationDate" parameterType="com.roommateAPI.models.AuthorizationToken">
+        UPDATE Tokens SET expirationDate = #{expirationDate} WHERE id = #{id}
+    </update>
+
+</mapper>

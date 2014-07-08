@@ -58,20 +58,23 @@ public class Authentication {
         }
     }
 
-    //TODO:  Extract this to a token service.  This resource knows WAYYYY too much about token logic.
     private AuthorizationToken getAuthorizationToken(UserModel user) {
         AuthorizationToken token;
         if(validTokenForUserExists(user.getId())) {
-            authorizationTokenDao.updateTokenExpirationDate(user.getId(), createNewExpirationTimestamp());
+            //TODO: Reorganize this so that we only get the token once because we fetch it once in the IF already.
             token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
+            token.setExpirationDate(createNewExpirationTimestamp());
+            authorizationTokenDao.updateTokenExpirationDate(token);
         }
         else {
             token = createNewToken(user.getId());
             authorizationTokenDao.insertAuthorizationToken(token);
         }
+
         return token;
     }
 
+    //TODO:  Extract this to a token service.  This resource knows WAYYYY too much about token logic.
     private Timestamp createNewExpirationTimestamp() {
         return new Timestamp(new DateTime().plusMonths(1).getMillis());
     }

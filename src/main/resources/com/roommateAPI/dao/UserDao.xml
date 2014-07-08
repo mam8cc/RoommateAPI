@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.roommateAPI.dao.UserDao">
+
+    <select id="selectUserByEmail" resultType="com.roommateAPI.models.UserModel" parameterType="String">
+        SELECT * FROM Users WHERE email = #{email};
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.roommateAPI.models.UserModel">
+        INSERT INTO USERS (email, password) VALUES (#{email}, #{password})
+    </insert>
+
+</mapper>

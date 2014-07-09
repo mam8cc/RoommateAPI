@@ -1,5 +1,6 @@
 package com.roommateAPI.resources;
 
+import com.lambdaworks.crypto.SCryptUtil;
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
@@ -18,9 +19,6 @@ import static java.util.UUID.randomUUID;
 /**
  * Jumping off point for our authentication aspirations.
  * //TODO:
- * 2. Auth scheme of choice? (scrypt, bcrypt, PBKDF2)
- * 3. What do we return?
- * 4. Do we need to store a token on server?
  * 5. Do we need a filter to catch calls with certain annotations to check auth?
  * <p/>
  * <p/>
@@ -40,6 +38,15 @@ public class Authentication {
     @Autowired AuthorizationTokenDao authorizationTokenDao;
     @Autowired UserDao userDao;
 
+    /**
+     * A service to return an auth token if the user has successfully logged in or an exception to indicate a login failure.
+     *
+     * @param post a {@link LoginAttemptModel} containing the username and password (subject to change).
+     * @return
+     * @throws SQLException           an exception if there is an error requesting the user from the database.
+     * @throws NotAuthorizedException an exception to alert the user that the login information provided was wrong.
+     * @throws NotFoundException      an exception to indicate there is no user with the email address provided.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/login")
@@ -50,7 +57,7 @@ public class Authentication {
             throw new NotFoundException();
         }
 
-        if(post.getPassword().equals(user.getPassword())) {
+        if (SCryptUtil.check(post.getPassword(), user.getPassword())) {
             return getAuthorizationToken(user);
         }
         else {

@@ -1,1 +1,1 @@
-INSERT INTO USERS (email, password) VALUES ('test@test.com', 'testPassword');
+INSERT INTO USERS (email, password) VALUES ('test@test.com', '$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=');

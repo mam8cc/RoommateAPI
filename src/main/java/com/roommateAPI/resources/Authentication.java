@@ -1,5 +1,6 @@
 package com.roommateAPI.resources;
 
+import com.lambdaworks.crypto.SCryptUtil;
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
@@ -18,9 +19,6 @@ import static java.util.UUID.randomUUID;
 /**
  * Jumping off point for our authentication aspirations.
  * //TODO:
- * 2. Auth scheme of choice? (scrypt, bcrypt, PBKDF2)
- * 3. What do we return?
- * 4. Do we need to store a token on server?
  * 5. Do we need a filter to catch calls with certain annotations to check auth?
  * <p/>
  * <p/>
@@ -35,58 +33,17 @@ import static java.util.UUID.randomUUID;
  * @author Steven Rodenberg
  */
 @Path("authentication")
-public class Authentication {
+public final class Authentication {
 
     @Autowired AuthorizationTokenDao authorizationTokenDao;
     @Autowired UserDao userDao;
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/login")
-    public AuthorizationToken login2(final LoginAttemptModel post) throws SQLException, NotAuthorizedException {
-        UserModel user = userDao.selectUserByEmail(post.getEmail());
-
-        if(user == null) {
-            throw new NotFoundException();
-        }
-
-        if(post.getPassword().equals(user.getPassword())) {
-            return getAuthorizationToken(user);
-        }
-        else {
-            throw new NotAuthorizedException("Not authorized.");
-        }
-    }
-
-    private AuthorizationToken getAuthorizationToken(UserModel user) {
-        AuthorizationToken token;
-        if(validTokenForUserExists(user.getId())) {
-            //TODO: Reorganize this so that we only get the token once because we fetch it once in the IF already.
-            token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
-            token.setExpirationDate(createNewExpirationTimestamp());
-            authorizationTokenDao.updateTokenExpirationDate(token);
-        }
-        else {
-            token = createNewToken(user.getId());
-            authorizationTokenDao.insertAuthorizationToken(token);
-        }
-
-        return token;
-    }
-
     //TODO:  Extract this to a token service.  This resource knows WAYYYY too much about token logic.
-    private Timestamp createNewExpirationTimestamp() {
+    private static Timestamp createNewExpirationTimestamp() {
         return new Timestamp(new DateTime().plusMonths(1).getMillis());
     }
 
-    private boolean validTokenForUserExists(Long userId) {
-        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(userId);
-
-        return token != null && token.getExpirationDate().getTime() < new DateTime().getMillis();
-
-    }
-
-    private AuthorizationToken createNewToken(Long userId) {
+    private static AuthorizationToken createNewToken(Long userId) {
         DateTime expires = new DateTime();
         expires.plusMonths(1);
 
@@ -96,5 +53,53 @@ public class Authentication {
         token.setExpirationDate(new Timestamp(expires.getMillis()));
 
         return token;
+    }
+
+    /**
+     * A service to return an auth token if the user has successfully logged in or an exception to indicate a login failure.
+     *
+     * @param post a {@link LoginAttemptModel} containing the username and password (subject to change).
+     * @return
+     * @throws SQLException           an exception if there is an error requesting the user from the database.
+     * @throws NotAuthorizedException an exception to alert the user that the login information provided was wrong.
+     * @throws NotFoundException      an exception to indicate there is no user with the email address provided.
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/login")
+    public AuthorizationToken login2(final LoginAttemptModel post) throws SQLException, NotAuthorizedException {
+        UserModel user = userDao.selectUserByEmail(post.getEmail());
+
+        if (user == null) {
+            throw new NotFoundException();
+        }
+
+        if (SCryptUtil.check(post.getPassword(), user.getPassword())) {
+            return getAuthorizationToken(user);
+        } else {
+            throw new NotAuthorizedException("Not authorized.");
+        }
+    }
+
+    private AuthorizationToken getAuthorizationToken(UserModel user) {
+        AuthorizationToken token;
+        if (validTokenForUserExists(user.getId())) {
+            //TODO: Reorganize this so that we only get the token once because we fetch it once in the IF already.
+            token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
+            token.setExpirationDate(createNewExpirationTimestamp());
+            authorizationTokenDao.updateTokenExpirationDate(token);
+        } else {
+            token = createNewToken(user.getId());
+            authorizationTokenDao.insertAuthorizationToken(token);
+        }
+
+        return token;
+    }
+
+    private boolean validTokenForUserExists(Long userId) {
+        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(userId);
+
+        return token != null && token.getExpirationDate().getTime() < new DateTime().getMillis();
+
     }
 }

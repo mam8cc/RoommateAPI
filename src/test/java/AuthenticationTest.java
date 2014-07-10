@@ -66,7 +66,7 @@ public final class AuthenticationTest {
     private LoginAttemptModel setupGoodLoginAttempt() {
         LoginAttemptModel model = new LoginAttemptModel();
         model.setEmail("test@test.com");
-        model.setPassword("password");
+        model.setPassword("secret");
 
         return model;
     }
@@ -80,7 +80,8 @@ public final class AuthenticationTest {
     }
 
     private UserModel setupUserModel() {
-        return new UserModel(0l, "test@test.com", "password");
+        //Password is secret
+        return new UserModel(0l, "test@test.com", "$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=");
     }
 
     private AuthorizationToken createAuthorizationToken() {

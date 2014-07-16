@@ -3,13 +3,13 @@ package com.roommateAPI.models;
 /**
  * A model that represents a registration attempt.
  */
-public class RegistrationForm {
+public class Registration {
 
     private String email;
     private String password;
 
-    public RegistrationForm(String email,
-                            String password) {
+    public Registration(String email,
+                        String password) {
         this.email = email;
         this.password = password;
     }

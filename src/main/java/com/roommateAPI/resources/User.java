@@ -1,7 +1,7 @@
 package com.roommateAPI.resources;
 
 import com.roommateAPI.dao.UserDao;
-import com.roommateAPI.models.RegistrationForm;
+import com.roommateAPI.models.Registration;
 import com.roommateAPI.models.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,16 +19,15 @@ import java.sql.SQLException;
  * TODO:
  * 1. Should anything besides a 200 be returned?
  */
-@Path("registration")
-public final class Registration {
+@Path("user")
+public final class User {
 
     @Autowired
     UserDao userDao;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/new")
-    public Response register(final RegistrationForm post) throws SQLException {
+    public Response register(final Registration post) throws SQLException {
         UserModel model = userDao.selectUserByEmail(post.getEmail());
         if (model != null) {
             //User already exists, kick back an exception.

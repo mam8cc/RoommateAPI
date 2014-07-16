@@ -9,7 +9,7 @@
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.roommateAPI.models.RegistrationForm">
+            parameterType="com.roommateAPI.models.Registration">
     INSERT INTO USERS (email, password) VALUES (#{email}, #{password})
     </insert>
 

@@ -1,9 +1,10 @@
+package com.roommateAPI.resources;
+
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.LoginAttemptModel;
 import com.roommateAPI.models.UserModel;
-import com.roommateAPI.resources.Token;
 import com.roommateAPI.service.TokenService;
 import org.joda.time.DateTime;
 import org.junit.Rule;

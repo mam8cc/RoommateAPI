@@ -3,33 +3,20 @@ package com.roommateAPI.service;
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.UserModel;
+import com.roommateAPI.utility.UniqueIdentifierGenerator;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 
-import static java.util.UUID.randomUUID;
-
 public class TokenService {
 
     @Autowired AuthorizationTokenDao authorizationTokenDao;
-
-    public static AuthorizationToken createNewToken(Long userId) {
-        DateTime expires = new DateTime();
-        expires.plusMonths(1);
-
-        AuthorizationToken token = new AuthorizationToken();
-        token.setUserId(userId);
-        token.setToken(randomUUID().toString());
-        token.setExpirationDate(new Timestamp(expires.getMillis()));
-
-        return token;
-    }
+    @Autowired UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
     public AuthorizationToken getAuthorizationToken(UserModel user) {
-        AuthorizationToken token;
-        if (validTokenForUserExists(user.getId())) {
-            token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
+        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());;
+        if (tokenIsValid(token)) {
             token.setExpirationDate(createNewExpirationTimestamp());
             authorizationTokenDao.updateTokenExpirationDate(token);
         } else {
@@ -40,10 +27,25 @@ public class TokenService {
         return token;
     }
 
-    private boolean validTokenForUserExists(Long userId) {
-        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(userId);
+    private AuthorizationToken createNewToken(Long userId) {
+        DateTime expires = new DateTime();
+        expires.plusMonths(1);
 
-        return token != null && token.getExpirationDate().getTime() < new DateTime().getMillis();
+        AuthorizationToken token = new AuthorizationToken();
+        token.setUserId(userId);
+        token.setToken(uniqueIdentifierGenerator.generateId());
+        token.setExpirationDate(new Timestamp(expires.getMillis()));
+
+        return token;
+    }
+
+    private boolean tokenIsValid(AuthorizationToken token) {
+        if(token != null) {
+            return token.getExpirationDate().getTime() < new DateTime().getMillis();
+        }
+        else {
+            return false;
+        }
     }
 
     private static Timestamp createNewExpirationTimestamp() {

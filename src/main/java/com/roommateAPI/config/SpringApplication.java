@@ -15,7 +15,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan("com.roommateAPI.service")
+@ComponentScan("com.roommateAPI")
 @MapperScan("com.roommateAPI.dao")
 public class SpringApplication {
 
@@ -24,6 +24,7 @@ public class SpringApplication {
         SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
         return sessionTemplate.getMapper(AuthorizationTokenDao.class);
     }
+
     @Bean
     public UserDao userDao() throws Exception {
         SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());

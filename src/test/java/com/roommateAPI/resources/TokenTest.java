@@ -1,9 +1,11 @@
+package com.roommateAPI.resources;
+
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.LoginAttemptModel;
 import com.roommateAPI.models.UserModel;
-import com.roommateAPI.resources.Authentication;
+import com.roommateAPI.service.TokenService;
 import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +21,6 @@ import java.sql.Timestamp;
 
 import static java.util.UUID.randomUUID;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -27,38 +28,40 @@ import static org.mockito.Mockito.when;
  * @author Steven Rodenberg
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class AuthenticationTest {
+public final class TokenTest {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    @InjectMocks Authentication authentication = new Authentication();
+    @InjectMocks Token token = new Token();
 
     @Mock UserDao userDao;
     @Mock AuthorizationTokenDao authorizationTokenDao;
+    @Mock TokenService tokenService;
 
     @Test(expected = NotAuthorizedException.class)
     public void itShouldReturnHTTPNotAuthorizedWhenAuthorizationIsBad() throws Exception {
         when(userDao.selectUserByEmail(anyString())).thenReturn(setupUserModel());
 
-        authentication.login2(setupBadLoginAttempt());
+        token.login(setupBadLoginAttempt());
     }
 
     @Test(expected = NotFoundException.class)
     public void itShouldReturnHTTPNotFoundWhenNoUserFound() throws Exception {
         when(userDao.selectUserByEmail(anyString())).thenReturn(null);
 
-        authentication.login2(setupBadLoginAttempt());
+        token.login(setupBadLoginAttempt());
     }
 
     @Test
     public void itShouldReturnAnAuthorizationToken() throws Exception {
         AuthorizationToken token = createAuthorizationToken();
+        UserModel user = setupUserModel();
 
-        when(userDao.selectUserByEmail(anyString())).thenReturn(setupUserModel());
-        when(authorizationTokenDao.selectAuthorizationTokenByUserId(anyLong())).thenReturn(token);
+        when(userDao.selectUserByEmail(anyString())).thenReturn(user);
+        when(tokenService.getAuthorizationToken(user)).thenReturn(token);
 
-        AuthorizationToken response = authentication.login2(setupGoodLoginAttempt());
+        AuthorizationToken response = this.token.login(setupGoodLoginAttempt());
 
         assertEquals(token, response);
     }

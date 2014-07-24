@@ -46,7 +46,7 @@ public final class Token {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/login")
-    public AuthorizationToken login2(final LoginAttemptModel post) throws SQLException, NotAuthorizedException {
+    public AuthorizationToken login(final LoginAttemptModel post) throws SQLException, NotAuthorizedException {
         UserModel user = userDao.selectUserByEmail(post.getEmail());
 
         if (user == null) {

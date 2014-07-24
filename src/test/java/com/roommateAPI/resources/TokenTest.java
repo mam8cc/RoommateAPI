@@ -43,14 +43,14 @@ public final class TokenTest {
     public void itShouldReturnHTTPNotAuthorizedWhenAuthorizationIsBad() throws Exception {
         when(userDao.selectUserByEmail(anyString())).thenReturn(setupUserModel());
 
-        token.login2(setupBadLoginAttempt());
+        token.login(setupBadLoginAttempt());
     }
 
     @Test(expected = NotFoundException.class)
     public void itShouldReturnHTTPNotFoundWhenNoUserFound() throws Exception {
         when(userDao.selectUserByEmail(anyString())).thenReturn(null);
 
-        token.login2(setupBadLoginAttempt());
+        token.login(setupBadLoginAttempt());
     }
 
     @Test
@@ -61,7 +61,7 @@ public final class TokenTest {
         when(userDao.selectUserByEmail(anyString())).thenReturn(user);
         when(tokenService.getAuthorizationToken(user)).thenReturn(token);
 
-        AuthorizationToken response = this.token.login2(setupGoodLoginAttempt());
+        AuthorizationToken response = this.token.login(setupGoodLoginAttempt());
 
         assertEquals(token, response);
     }

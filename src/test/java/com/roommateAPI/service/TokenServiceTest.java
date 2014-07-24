@@ -64,12 +64,6 @@ public class TokenServiceTest {
         verify(authorizationTokenDao).insertAuthorizationToken(any(AuthorizationToken.class));
     }
 
-    private Timestamp getTimestamp() {
-        DateTime now = new DateTime();
-        now.plusMonths(1);
-        return new Timestamp(now.getMillis());
-    }
-
     private UserModel setupUserModel() {
         //Password is secret
         return new UserModel(0l, "test@test.com", "$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=");

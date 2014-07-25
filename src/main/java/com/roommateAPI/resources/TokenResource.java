@@ -3,7 +3,7 @@ package com.roommateAPI.resources;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
-import com.roommateAPI.models.LoginAttemptModel;
+import com.roommateAPI.models.Login;
 import com.roommateAPI.models.UserModel;
 import com.roommateAPI.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import java.sql.SQLException;
  * @author Steven Rodenberg
  */
 @Path("authentication")
-public final class Token {
+public final class TokenResource {
 
     @Autowired UserDao userDao;
     @Autowired TokenService tokenService;
@@ -37,7 +37,7 @@ public final class Token {
     /**
      * A service to return an auth token if the user has successfully logged in or an exception to indicate a login failure.
      *
-     * @param post a {@link LoginAttemptModel} containing the username and password (subject to change).
+     * @param post a {@link com.roommateAPI.models.Login} containing the username and password (subject to change).
      * @return
      * @throws SQLException           an exception if there is an error requesting the user from the database.
      * @throws NotAuthorizedException an exception to alert the user that the login information provided was wrong.
@@ -46,7 +46,7 @@ public final class Token {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/login")
-    public AuthorizationToken login(final LoginAttemptModel post) throws SQLException, NotAuthorizedException {
+    public AuthorizationToken login(final Login post) throws SQLException, NotAuthorizedException {
         UserModel user = userDao.selectUserByEmail(post.getEmail());
 
         if (user == null) {

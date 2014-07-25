@@ -20,7 +20,7 @@ import java.sql.SQLException;
  * 1. Should anything besides a 200 be returned?
  */
 @Path("user")
-public final class User {
+public final class UserResource {
 
     @Autowired
     UserDao userDao;

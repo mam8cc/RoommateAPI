@@ -1,15 +1,15 @@
 package com.roommateAPI.config;
 
 import com.roommateAPI.resources.ResidenceResource;
-import com.roommateAPI.resources.Token;
-import com.roommateAPI.resources.User;
+import com.roommateAPI.resources.TokenResource;
+import com.roommateAPI.resources.UserResource;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class JerseyApplication extends ResourceConfig {
 
     public JerseyApplication() {
-        register(Token.class);
-        register(User.class);
+        register(TokenResource.class);
+        register(UserResource.class);
         register(ResidenceResource.class);
     }
 

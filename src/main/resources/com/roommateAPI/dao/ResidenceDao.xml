@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.roommateAPI.dao.ResidenceDao">
+    <select id="selectResidence" resultMap="residenceResultMap">
+        SELECT
+            *
+        FROM
+            Residences
+            JOIN Users
+                ON Residences.id = Users.residenceId
+        WHERE
+            id = #{id}
+    </select>
+
+    <resultMap id="residenceResultMap" type="com.roommateAPI.models.Residence">
+        <id property="id" column="id" />
+        <result column="name" property="name" />
+        <collection property="residents" ofType="com.roommateAPI.models.UserModel">
+            <id property="id" column="id"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+        </collection>
+    </resultMap>
+</mapper>

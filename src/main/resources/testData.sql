@@ -1,1 +1,2 @@
-INSERT INTO USERS (email, password) VALUES ('test@test.com', '$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=');
+INSERT INTO RESIDENCES (name) VALUES ('Test Residence');
+INSERT INTO USERS (email, password, residenceId) VALUES ('test@test.com', '$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=', 0);

@@ -4,7 +4,7 @@ import com.lambdaworks.crypto.SCryptUtil;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.Login;
-import com.roommateAPI.models.UserModel;
+import com.roommateAPI.models.User;
 import com.roommateAPI.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,7 +47,7 @@ public final class TokenResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/login")
     public AuthorizationToken login(final Login post) throws SQLException, NotAuthorizedException {
-        UserModel user = userDao.selectUserByEmail(post.getEmail());
+        User user = userDao.selectUserByEmail(post.getEmail());
 
         if (user == null) {
             throw new NotFoundException();

@@ -1,41 +1,43 @@
 package com.roommateAPI.resources;
 
 import com.roommateAPI.dao.UserDao;
+import com.roommateAPI.exceptions.HttpConflictException;
 import com.roommateAPI.models.Registration;
-import com.roommateAPI.models.UserModel;
+import com.roommateAPI.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.SQLException;
 
-/**
- * A service with an endpoint that describes all registration options.
- * <p/>
- * TODO:
- * 1. Should anything besides a 200 be returned?
- */
-@Path("user")
+@Path("/users")
 public final class UserResource {
 
     @Autowired
     UserDao userDao;
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response register(final Registration post) throws SQLException {
-        UserModel model = userDao.selectUserByEmail(post.getEmail());
-        if (model != null) {
-            //User already exists, kick back an exception.
-            throw new ClientErrorException("email already registered", Response.Status.CONFLICT);
+    @GET
+    @Path("/{id}")
+    public Response getUser(@PathParam("id") Integer id) {
+        User user = userDao.selectUser(id);
+
+        if(user == null) {
+            throw new NotFoundException();
         }
 
-        userDao.insertUser(post);
-        return Response.status(201).build();
+        return Response.ok().entity(user).build();
+    }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response register(Registration post) {
+        if (userDao.selectUserByEmail(post.getEmail()) != null) {
+            throw new HttpConflictException("Not found.");
+        }
+
+        User newUser = new User(null, post.getEmail(), post.getPassword());
+        userDao.insertUser(newUser);
+
+        return Response.status(201).entity(newUser).build();
     }
 }

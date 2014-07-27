@@ -1,15 +1,15 @@
 package com.roommateAPI.models;
 
-public class UserModel {
+public class User {
     public Long id;
     public String email;
     public String password;
 
-    public UserModel() {
+    public User() {
 
     }
 
-    public UserModel(Long id, String email, String password) {
+    public User(Long id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;

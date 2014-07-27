@@ -6,7 +6,7 @@ public class Residence {
 
     public Long id;
     public String name;
-    public List<UserModel> residents;
+    public List<User> residents;
 
     public String getName() {
         return name;
@@ -16,11 +16,11 @@ public class Residence {
         this.name = name;
     }
 
-    public List<UserModel> getResidents() {
+    public List<User> getResidents() {
         return residents;
     }
 
-    public void setResidents(List<UserModel> residents) {
+    public void setResidents(List<User> residents) {
         this.residents = residents;
     }
 }

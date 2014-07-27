@@ -17,7 +17,7 @@
     <resultMap id="residenceResultMap" type="com.roommateAPI.models.Residence">
         <id property="id" column="id" />
         <result column="name" property="name" />
-        <collection property="residents" ofType="com.roommateAPI.models.UserModel">
+        <collection property="residents" ofType="com.roommateAPI.models.User">
             <id property="id" column="id"/>
             <result property="email" column="email"/>
             <result property="password" column="password"/>

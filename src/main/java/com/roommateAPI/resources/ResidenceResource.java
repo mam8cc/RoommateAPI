@@ -5,6 +5,7 @@ import com.roommateAPI.models.Residence;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
@@ -18,6 +19,10 @@ public class ResidenceResource {
     @Path("/{id}")
     public Response getResidence(@PathParam("id") int id) {
         Residence residence = residenceDao.selectResidence(id);
+
+        if(residence == null) {
+            throw new NotFoundException();
+        }
 
         return Response.ok().entity(residence).build();
     }

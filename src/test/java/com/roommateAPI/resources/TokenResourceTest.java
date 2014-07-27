@@ -4,7 +4,7 @@ import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.Login;
-import com.roommateAPI.models.UserModel;
+import com.roommateAPI.models.User;
 import com.roommateAPI.service.TokenService;
 import org.joda.time.DateTime;
 import org.junit.Rule;
@@ -56,7 +56,7 @@ public final class TokenResourceTest {
     @Test
     public void itShouldReturnAnAuthorizationToken() throws Exception {
         AuthorizationToken token = createAuthorizationToken();
-        UserModel user = setupUserModel();
+        User user = setupUserModel();
 
         when(userDao.selectUserByEmail(anyString())).thenReturn(user);
         when(tokenService.getAuthorizationToken(user)).thenReturn(token);
@@ -82,9 +82,9 @@ public final class TokenResourceTest {
         return model;
     }
 
-    private UserModel setupUserModel() {
+    private User setupUserModel() {
         //Password is secret
-        return new UserModel(0l, "test@test.com", "$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=");
+        return new User(0l, "test@test.com", "$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=");
     }
 
     private AuthorizationToken createAuthorizationToken() {

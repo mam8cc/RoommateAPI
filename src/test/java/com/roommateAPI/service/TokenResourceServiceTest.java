@@ -2,7 +2,7 @@ package com.roommateAPI.service;
 
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.models.AuthorizationToken;
-import com.roommateAPI.models.UserModel;
+import com.roommateAPI.models.User;
 import com.roommateAPI.utility.UniqueIdentifierGenerator;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -64,9 +64,9 @@ public class TokenResourceServiceTest {
         verify(authorizationTokenDao).insertAuthorizationToken(any(AuthorizationToken.class));
     }
 
-    private UserModel setupUserModel() {
+    private User setupUserModel() {
         //Password is secret
-        return new UserModel(0l, "test@test.com", "$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=");
+        return new User(0l, "test@test.com", "$s0$e0801$epIxT/h6HbbwHaehFnh/bw==$7H0vsXlY8UxxyW/BWx/9GuY7jEvGjT71GFd6O4SZND0=");
     }
 
     private AuthorizationToken setupExistingAuthorizationToken() {

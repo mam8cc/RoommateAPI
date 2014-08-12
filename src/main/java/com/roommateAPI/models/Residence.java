@@ -23,4 +23,12 @@ public class Residence {
     public void setResidents(List<User> residents) {
         this.residents = residents;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

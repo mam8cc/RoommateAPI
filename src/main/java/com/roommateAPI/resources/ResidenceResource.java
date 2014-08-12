@@ -4,11 +4,9 @@ import com.roommateAPI.dao.ResidenceDao;
 import com.roommateAPI.models.Residence;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 @Path("/residences")
 public class ResidenceResource {
@@ -25,5 +23,17 @@ public class ResidenceResource {
         }
 
         return Response.ok().entity(residence).build();
+    }
+
+    @POST
+    public Response createResidence(Residence newResidence) {
+        residenceDao.insertResidence(newResidence);
+
+        return Response.created(buildUri(newResidence.getId())).entity(newResidence).build();
+    }
+
+
+    private URI buildUri(long id) {
+        return URI.create("/residences/" + id);
     }
 }

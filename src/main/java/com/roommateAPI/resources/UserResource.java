@@ -1,5 +1,6 @@
 package com.roommateAPI.resources;
 
+import com.lambdaworks.crypto.SCryptUtil;
 import com.roommateAPI.dao.UserDao;
 import com.roommateAPI.exceptions.HttpConflictException;
 import com.roommateAPI.models.Registration;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 @Path("/users")
 public final class UserResource {
@@ -35,9 +37,15 @@ public final class UserResource {
             throw new HttpConflictException("Not found.");
         }
 
-        User newUser = new User(null, post.getEmail(), post.getPassword());
+        //TODO:  Research the proper way to hash this, numbers are straight from https://github.com/wg/scrypt
+        User newUser = new User(null, post.getEmail(), SCryptUtil.scrypt(post.getPassword(),16384, 8, 1));
         userDao.insertUser(newUser);
 
-        return Response.status(201).entity(newUser).build();
+        return Response.created(buildUri(newUser.getId())).entity(newUser).build();
     }
+
+    private URI buildUri(long id) {
+        return URI.create("/users/" + id);
+    }
+
 }

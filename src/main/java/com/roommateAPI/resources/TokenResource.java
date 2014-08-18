@@ -37,7 +37,7 @@ public final class TokenResource {
     /**
      * A service to return an auth token if the user has successfully logged in or an exception to indicate a login failure.
      *
-     * @param post a {@link com.roommateAPI.models.Login} containing the username and password (subject to change).
+     * @param post a {@link Login} containing the username and password (subject to change).
      * @return
      * @throws SQLException           an exception if there is an error requesting the user from the database.
      * @throws NotAuthorizedException an exception to alert the user that the login information provided was wrong.

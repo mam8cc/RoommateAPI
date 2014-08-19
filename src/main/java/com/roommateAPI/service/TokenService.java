@@ -16,7 +16,7 @@ public class TokenService {
 
     public AuthorizationToken getAuthorizationToken(User user) {
         AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
-        if (tokenIsValid(token)) {
+        if (isTokenValid(token)) {
             token.setExpirationDate(createNewExpirationTimestamp());
             authorizationTokenDao.updateTokenExpirationDate(token);
         } else {
@@ -39,7 +39,7 @@ public class TokenService {
         return token;
     }
 
-    private boolean tokenIsValid(AuthorizationToken token) {
+    public boolean isTokenValid(AuthorizationToken token) {
         if(token != null) {
             return token.getExpirationDate().getTime() < new DateTime().getMillis();
         }

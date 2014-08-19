@@ -9,4 +9,6 @@ public interface AuthorizationTokenDao {
     public AuthorizationToken selectAuthorizationTokenByUserId(Long userId);
 
     public void updateTokenExpirationDate(AuthorizationToken token);
+
+    public AuthorizationToken selectAuthorizationTokenByToken(String tokenString);
 }

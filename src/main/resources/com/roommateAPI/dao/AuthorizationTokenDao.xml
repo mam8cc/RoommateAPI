@@ -15,7 +15,7 @@
         SELECT * FROM Tokens WHERE userId = #{userId}
     </select>
 
-    <select id="selectAuthorizationTokenByToken" resultType="com.roommateAPI.models.AuthorizationToken">
+    <select id="selectAuthorizationTokenByTokenString" resultType="com.roommateAPI.models.AuthorizationToken">
         SELECT * FROM Tokens WHERE token = #{tokenString}
     </select>
 

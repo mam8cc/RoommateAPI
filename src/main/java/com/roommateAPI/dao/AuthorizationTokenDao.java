@@ -10,5 +10,5 @@ public interface AuthorizationTokenDao {
 
     public void updateTokenExpirationDate(AuthorizationToken token);
 
-    public AuthorizationToken selectAuthorizationTokenByToken(String tokenString);
+    public AuthorizationToken selectAuthorizationTokenByTokenString(String tokenString);
 }

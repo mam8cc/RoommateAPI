@@ -19,14 +19,21 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String route = requestContext.getUriInfo().getPath();
 
-        //TODO:  Probably should extend this to user creation as well since it happens before authentication
-        if(!route.matches("(?i).*login*")) {
+        if(isNotTokenAuthenticationRequest(route) && isNotUserCreationRequest(route, requestContext.getMethod())) {
             String requestToken = requestContext.getHeaderString("token");
-            AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByToken(requestToken);
+            AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByTokenString(requestToken);
 
             if (!tokenService.isTokenValid(token)) {
                 requestContext.abortWith(Response.status(401).entity("Please request a token.").build());
             }
         }
+    }
+
+    private boolean isNotTokenAuthenticationRequest(String route) {
+        return !route.equalsIgnoreCase("/authentication/login");
+    }
+
+    private boolean isNotUserCreationRequest(String route, String method) {
+        return !route.equalsIgnoreCase("/users") && method.equalsIgnoreCase("POST");
     }
 }

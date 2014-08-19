@@ -1,12 +1,13 @@
 package com.roommateAPI.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Residence {
 
     public Long id;
     public String name;
-    public List<User> residents;
+    public List<User> residents = new ArrayList<User>();
 
     public String getName() {
         return name;
@@ -21,7 +22,12 @@ public class Residence {
     }
 
     public void setResidents(List<User> residents) {
-        this.residents = residents;
+        if(residents == null) {
+            this.residents = new ArrayList<User>();
+        }
+        else {
+            this.residents = residents;
+        }
     }
 
     public Long getId() {

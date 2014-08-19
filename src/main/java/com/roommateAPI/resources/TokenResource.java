@@ -37,6 +37,10 @@ public final class TokenResource {
     /**
      * A service to return an auth token if the user has successfully logged in or an exception to indicate a login failure.
      *
+     * CREDENTIALS
+     * Username: test@test.com
+     * Password: password
+     *
      * @param post a {@link Login} containing the username and password (subject to change).
      * @return
      * @throws SQLException           an exception if there is an error requesting the user from the database.
@@ -54,6 +58,8 @@ public final class TokenResource {
         }
 
         if (SCryptUtil.check(post.getPassword(), user.getPassword())) {
+            System.out.println(tokenService);
+            //TODO: Refactor this to use the ResponseBuilder.created()
             return tokenService.getAuthorizationToken(user);
         } else {
             throw new NotAuthorizedException("Not authorized.");

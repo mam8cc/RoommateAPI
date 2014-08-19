@@ -1,5 +1,7 @@
 package com.roommateAPI.config;
 
+import com.roommateAPI.service.TokenService;
+import com.roommateAPI.utility.UniqueIdentifierGenerator;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -15,6 +17,16 @@ import javax.sql.DataSource;
 @ComponentScan("com.roommateAPI")
 @MapperScan("com.roommateAPI.dao")
 public class SpringApplication {
+
+    @Bean
+    public TokenService tokenService() {
+        return new TokenService();
+    }
+
+    @Bean
+    public UniqueIdentifierGenerator uniqueIdentifierGenerator() {
+        return new UniqueIdentifierGenerator();
+    }
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {

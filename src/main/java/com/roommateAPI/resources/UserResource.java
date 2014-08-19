@@ -38,7 +38,7 @@ public final class UserResource {
         }
 
         //TODO:  Research the proper way to hash this, numbers are straight from https://github.com/wg/scrypt
-        User newUser = new User(null, post.getEmail(), SCryptUtil.scrypt(post.getPassword(),16384, 8, 1));
+        User newUser = new User(null, post.getEmail(), SCryptUtil.scrypt(post.getPassword(), 16384, 8, 1));
         userDao.insertUser(newUser);
 
         return Response.created(buildUri(newUser.getId())).entity(newUser).build();

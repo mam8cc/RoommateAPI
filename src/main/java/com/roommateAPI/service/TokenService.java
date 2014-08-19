@@ -15,7 +15,7 @@ public class TokenService {
     @Autowired UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
     public AuthorizationToken getAuthorizationToken(User user) {
-        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());;
+        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
         if (tokenIsValid(token)) {
             token.setExpirationDate(createNewExpirationTimestamp());
             authorizationTokenDao.updateTokenExpirationDate(token);

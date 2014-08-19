@@ -15,6 +15,10 @@
         SELECT * FROM Tokens WHERE userId = #{userId}
     </select>
 
+    <select id="selectAuthorizationTokenByTokenString" resultType="com.roommateAPI.models.AuthorizationToken">
+        SELECT * FROM Tokens WHERE token = #{tokenString}
+    </select>
+
     <update id="updateTokenExpirationDate" parameterType="com.roommateAPI.models.AuthorizationToken">
         UPDATE Tokens SET expirationDate = #{expirationDate} WHERE id = #{id}
     </update>

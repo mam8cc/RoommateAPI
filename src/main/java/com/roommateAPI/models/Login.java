@@ -1,6 +1,6 @@
 package com.roommateAPI.models;
 
-public class LoginAttemptModel {
+public class Login {
     public String email;
     public String password;
 

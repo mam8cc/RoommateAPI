@@ -4,13 +4,19 @@
 
 <mapper namespace="com.roommateAPI.dao.UserDao">
 
-    <select id="selectUserByEmail" resultType="com.roommateAPI.models.UserModel" parameterType="String">
+    <select id="selectUser" resultType="com.roommateAPI.models.User" parameterType="Integer" >
+        SELECT * FROM Users WHERE id = #{id};
+    </select>
+
+    <select id="selectUserByEmail" resultType="com.roommateAPI.models.User" parameterType="String">
         SELECT * FROM Users WHERE email = #{email};
     </select>
 
-    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.roommateAPI.models.Registration">
-    INSERT INTO USERS (email, password) VALUES (#{email}, #{password})
+    <insert id="insertUser"
+            parameterType="com.roommateAPI.models.User"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO USERS (id, email, password) VALUES (#{id}, #{email}, #{password});
     </insert>
 
 </mapper>

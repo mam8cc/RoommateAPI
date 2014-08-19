@@ -1,11 +1,12 @@
 package com.roommateAPI.dao;
 
-import com.roommateAPI.models.Registration;
-import com.roommateAPI.models.UserModel;
+import com.roommateAPI.models.User;
 
 public interface UserDao {
 
-    public void insertUser(Registration user);
+    public void insertUser(User user);
 
-    public UserModel selectUserByEmail(String email);
+    public User selectUser(Integer id);
+
+    public User selectUserByEmail(String email);
 }

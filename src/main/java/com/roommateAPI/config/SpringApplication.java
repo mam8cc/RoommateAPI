@@ -1,10 +1,9 @@
 package com.roommateAPI.config;
 
-import com.roommateAPI.dao.AuthorizationTokenDao;
-import com.roommateAPI.dao.UserDao;
+import com.roommateAPI.service.TokenService;
+import com.roommateAPI.utility.UniqueIdentifierGenerator;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,15 +19,13 @@ import javax.sql.DataSource;
 public class SpringApplication {
 
     @Bean
-    public AuthorizationTokenDao authorizationTokenDao() throws Exception {
-        SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
-        return sessionTemplate.getMapper(AuthorizationTokenDao.class);
+    public TokenService tokenService() {
+        return new TokenService();
     }
 
     @Bean
-    public UserDao userDao() throws Exception {
-        SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
-        return sessionTemplate.getMapper(UserDao.class);
+    public UniqueIdentifierGenerator uniqueIdentifierGenerator() {
+        return new UniqueIdentifierGenerator();
     }
 
     @Bean

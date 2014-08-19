@@ -2,7 +2,7 @@ package com.roommateAPI.service;
 
 import com.roommateAPI.dao.AuthorizationTokenDao;
 import com.roommateAPI.models.AuthorizationToken;
-import com.roommateAPI.models.UserModel;
+import com.roommateAPI.models.User;
 import com.roommateAPI.utility.UniqueIdentifierGenerator;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,9 @@ public class TokenService {
     @Autowired AuthorizationTokenDao authorizationTokenDao;
     @Autowired UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
-    public AuthorizationToken getAuthorizationToken(UserModel user) {
-        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());;
-        if (tokenIsValid(token)) {
+    public AuthorizationToken getAuthorizationToken(User user) {
+        AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
+        if (isTokenValid(token)) {
             token.setExpirationDate(createNewExpirationTimestamp());
             authorizationTokenDao.updateTokenExpirationDate(token);
         } else {
@@ -39,7 +39,7 @@ public class TokenService {
         return token;
     }
 
-    private boolean tokenIsValid(AuthorizationToken token) {
+    public boolean isTokenValid(AuthorizationToken token) {
         if(token != null) {
             return token.getExpirationDate().getTime() < new DateTime().getMillis();
         }

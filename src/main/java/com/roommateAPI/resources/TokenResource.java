@@ -58,7 +58,6 @@ public final class TokenResource {
         }
 
         if (SCryptUtil.check(post.getPassword(), user.getPassword())) {
-            System.out.println(tokenService);
             //TODO: Refactor this to use the ResponseBuilder.created()
             return tokenService.getAuthorizationToken(user);
         } else {

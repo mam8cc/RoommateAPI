@@ -1,6 +1,7 @@
 package com.roommateAPI.config;
 
 import com.roommateAPI.filters.AuthorizationFilter;
+import com.roommateAPI.filters.CorsFilter;
 import com.roommateAPI.resources.ResidenceResource;
 import com.roommateAPI.resources.StatusResource;
 import com.roommateAPI.resources.TokenResource;
@@ -17,6 +18,7 @@ public class JerseyApplication extends ResourceConfig {
         register(StatusResource.class);
 
         //Filters
+        register(CorsFilter.class);
         register(AuthorizationFilter.class);
     }
 

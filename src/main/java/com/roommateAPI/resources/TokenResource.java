@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Steven Rodenberg
  */
-@Path("authentication")
+@Path("token")
 public final class TokenResource {
 
     @Autowired UserDao userDao;
@@ -49,7 +49,6 @@ public final class TokenResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/login")
     public AuthorizationToken login(final Login post) throws SQLException, NotAuthorizedException {
         User user = userDao.selectUserByEmail(post.getEmail());
 

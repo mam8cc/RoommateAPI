@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Steven Rodenberg
  */
-@Path("token")
+@Path("tokens")
 public final class TokenResource {
 
     @Autowired UserDao userDao;

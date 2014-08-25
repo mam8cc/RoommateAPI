@@ -6,6 +6,8 @@ import com.roommateAPI.models.AuthorizationToken;
 import com.roommateAPI.models.Login;
 import com.roommateAPI.models.User;
 import com.roommateAPI.service.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
@@ -34,6 +36,8 @@ public final class TokenResource {
     @Autowired UserDao userDao;
     @Autowired TokenService tokenService;
 
+    static final Logger LOG = LoggerFactory.getLogger(TokenResource.class);
+
     /**
      * A service to return an auth token if the user has successfully logged in or an exception to indicate a login failure.
      *
@@ -50,6 +54,8 @@ public final class TokenResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public AuthorizationToken login(final Login post) throws SQLException, NotAuthorizedException {
+        LOG.info("LOGGING IN: " + post.getEmail() + " PASSWORD: " + post.getPassword());
+
         User user = userDao.selectUserByEmail(post.getEmail());
 
         if (user == null) {

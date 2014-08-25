@@ -19,7 +19,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String route = requestContext.getUriInfo().getPath();
 
-        if(isNotTokenAuthenticationRequest(route) && isNotUserCreationRequest(route, requestContext.getMethod())) {
+        if(isNotTokenAuthenticationRequest(route, requestContext.getMethod()) && isNotUserCreationRequest(route, requestContext.getMethod())) {
             String requestToken = requestContext.getHeaderString("token");
             AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByTokenString(requestToken);
 
@@ -29,8 +29,8 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         }
     }
 
-    private boolean isNotTokenAuthenticationRequest(String route) {
-        return !route.equalsIgnoreCase("/authentication/login");
+    private boolean isNotTokenAuthenticationRequest(String route, String method) {
+        return !route.equalsIgnoreCase("/tokens") && method.equalsIgnoreCase("POST");
     }
 
     private boolean isNotUserCreationRequest(String route, String method) {

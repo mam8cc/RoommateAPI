@@ -16,39 +16,41 @@ public class TokenService {
 
     public AuthorizationToken getAuthorizationToken(User user) {
         AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
-        if (isTokenValid(token)) {
-            token.setExpirationDate(createNewExpirationTimestamp());
-            authorizationTokenDao.updateTokenExpirationDate(token);
-        } else {
+
+        if(token == null) {
+            authorizationTokenDao.deleteTokensForUser(user.getId());
             token = createNewToken(user.getId());
             authorizationTokenDao.insertAuthorizationToken(token);
+        }
+        else if (isTokenValid(token)) {
+            token.setExpirationDate(createNewExpirationTimestamp());
+            authorizationTokenDao.updateTokenExpirationDate(token);
         }
 
         return token;
     }
 
     private AuthorizationToken createNewToken(Long userId) {
-        DateTime expires = new DateTime();
-        expires.plusMonths(1);
 
         AuthorizationToken token = new AuthorizationToken();
         token.setUserId(userId);
         token.setToken(uniqueIdentifierGenerator.generateId());
-        token.setExpirationDate(new Timestamp(expires.getMillis()));
+        token.setExpirationDate(createNewExpirationTimestamp());
 
         return token;
     }
 
     public boolean isTokenValid(AuthorizationToken token) {
-        if(token != null) {
-            return token.getExpirationDate().getTime() < new DateTime().getMillis();
-        }
-        else {
-            return false;
-        }
+        Timestamp expiration = new Timestamp(token.getExpirationDate().getTime());
+        Timestamp now = new Timestamp(new DateTime().getMillis());
+
+        return expiration.after(now);
     }
 
     private static Timestamp createNewExpirationTimestamp() {
-        return new Timestamp(new DateTime().plusMonths(1).getMillis());
+        DateTime expires = new DateTime();
+        expires = expires.plusMonths(1);
+
+        return new Timestamp(expires.getMillis());
     }
 }

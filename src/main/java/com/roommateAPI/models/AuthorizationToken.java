@@ -1,7 +1,6 @@
 package com.roommateAPI.models;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class AuthorizationToken {
     public Long id;
@@ -17,7 +16,7 @@ public class AuthorizationToken {
         this.token = token;
     }
 
-    public Date getExpirationDate() {
+    public Timestamp getExpirationDate() {
         return expirationDate;
     }
 

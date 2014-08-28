@@ -8,7 +8,7 @@
             parameterType="com.roommateAPI.models.AuthorizationToken"
             useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO TOKENS (id, userId, token) VALUES (#{id},#{userId},#{token})
+        INSERT INTO TOKENS (id, userId, token, expirationDate) VALUES (#{id},#{userId},#{token},#{expirationDate})
     </insert>
 
     <select id="selectAuthorizationTokenByUserId" resultType="com.roommateAPI.models.AuthorizationToken">
@@ -22,5 +22,9 @@
     <update id="updateTokenExpirationDate" parameterType="com.roommateAPI.models.AuthorizationToken">
         UPDATE Tokens SET expirationDate = #{expirationDate} WHERE id = #{id}
     </update>
+
+    <delete id="deleteTokensForUser">
+        DELETE FROM Tokens WHERE userId = #{userId}
+    </delete>
 
 </mapper>

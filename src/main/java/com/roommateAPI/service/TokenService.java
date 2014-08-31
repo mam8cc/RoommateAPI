@@ -17,21 +17,20 @@ public class TokenService {
     public AuthorizationToken getAuthorizationToken(User user) {
         AuthorizationToken token = authorizationTokenDao.selectAuthorizationTokenByUserId(user.getId());
 
-        if(token == null) {
+        if(isTokenValid(token)) {
+            token.setExpirationDate(createNewExpirationTimestamp());
+            authorizationTokenDao.updateTokenExpirationDate(token);
+        }
+        else {
             authorizationTokenDao.deleteTokensForUser(user.getId());
             token = createNewToken(user.getId());
             authorizationTokenDao.insertAuthorizationToken(token);
-        }
-        else if (isTokenValid(token)) {
-            token.setExpirationDate(createNewExpirationTimestamp());
-            authorizationTokenDao.updateTokenExpirationDate(token);
         }
 
         return token;
     }
 
     private AuthorizationToken createNewToken(Long userId) {
-
         AuthorizationToken token = new AuthorizationToken();
         token.setUserId(userId);
         token.setToken(uniqueIdentifierGenerator.generateId());
@@ -41,6 +40,10 @@ public class TokenService {
     }
 
     public boolean isTokenValid(AuthorizationToken token) {
+        if(token == null) {
+            return false;
+        }
+
         Timestamp expiration = new Timestamp(token.getExpirationDate().getTime());
         Timestamp now = new Timestamp(new DateTime().getMillis());
 
